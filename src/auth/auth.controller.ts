@@ -11,12 +11,12 @@ export class AuthController {
     @Post('signup')
     signup() {
         // Returned datatype is auto converted
-        return 'I am signed up'
+        return this.authService.signup();
     }
 
     // POST auth/signin
     @Post('signin')
     signin() {
-        return 'I am signed in'
+        return this.authService.signin();
     }
 }
