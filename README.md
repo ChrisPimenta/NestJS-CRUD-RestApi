@@ -76,3 +76,6 @@ Nest is [MIT licensed](LICENSE).
 ## My Notes
 ### Add a new module
 nest g module modulename
+
+### Run DB in docker
+docker compose up dev-db -d
