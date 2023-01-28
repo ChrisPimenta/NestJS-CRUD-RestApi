@@ -91,4 +91,5 @@ modify and view records in browser:
 npx prisma studio
 
 ### Start
+yarn db:dev:restart
 yarn start:dev
