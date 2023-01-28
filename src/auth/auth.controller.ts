@@ -16,7 +16,7 @@ export class AuthController {
             dto
         })
         // Returned datatype is auto converted
-        return this.authService.signup();
+        return this.authService.signup(dto);
     }
 
     // POST auth/signin

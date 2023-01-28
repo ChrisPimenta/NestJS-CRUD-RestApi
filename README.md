@@ -79,3 +79,16 @@ nest g module modulename
 
 ### Run DB in docker
 docker compose up dev-db -d
+
+### Prisma
+first time run:
+npx prisma generate
+
+updated schema run:
+npx prisma migrate dev
+
+modify and view records in browser:
+npx prisma studio
+
+### Start
+yarn start:dev
