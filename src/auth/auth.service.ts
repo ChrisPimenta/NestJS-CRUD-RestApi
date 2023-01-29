@@ -66,7 +66,7 @@ export class AuthService {
 
     // Create a token to use for JWT
     // Use jwt.io to check the returned token
-    async signToken(userId: number, email: string): Promise<{ access_token: string }> {
+    private async signToken(userId: number, email: string): Promise<{ access_token: string }> {
         const payload = {
             // Unique identifier needed
             sub: userId,
