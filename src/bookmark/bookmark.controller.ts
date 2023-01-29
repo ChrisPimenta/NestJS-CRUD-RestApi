@@ -25,7 +25,7 @@ export class BookmarkController {
     @Get(':bookmarkId')
     getBookmarkById(
         @GetUser('id') userId: number,
-        @Param('id', ParseIntPipe) bookmarkId: number
+        @Param('bookmarkId', ParseIntPipe) bookmarkId: number
     ) {
         return this.bookmarkService.getBookmarkById(userId, bookmarkId);
     }
@@ -44,7 +44,7 @@ export class BookmarkController {
     @Delete(':bookmarkId')
     deleteBookmarkById(
         @GetUser('id') userId: number,
-        @Param('id', ParseIntPipe) bookmarkId: number
+        @Param('bookmarkId', ParseIntPipe) bookmarkId: number
     ) {
         return this.bookmarkService.deleteBookmarkById(userId, bookmarkId);
     }

@@ -5,6 +5,7 @@ import { PrismaService } from '../src/prisma/prisma.service';
 import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
 import { EditUserDto } from '../src/user/dto';
+import { CreateBookmarkDto, EditBookmarkDto } from '../src/bookmark/dto';
 
 // This is e2e and only makes sure things work. integration testing is checking actual data and functions etc. Like unit tests.
 describe('App e2e', () => {
@@ -187,14 +188,94 @@ describe('App e2e', () => {
                         Authorization: 'Bearer $S{userAccessToken}'
                     })
                     .expectStatus(200)
-                    .withBody('')
+                    .expectBody([])
             })
         })
-        describe('Create bookmark', () => { })
-        describe('Get bookmarks', () => { })
-        describe('Get bookmark by Id', () => { })
-        describe('Edit bookmark', () => { })
-        describe('Delete bookmark', () => { })
+
+        describe('Create bookmark', () => {
+            const dto: CreateBookmarkDto = {
+                title: 'First link',
+                link: 'https://some-url.com',
+                description: 'This is my first bookmark ever. Cool!'
+            }
+
+            it('Create bookmark', () => {
+                return pactum
+                    .spec()
+                    .post('/bookmarks')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .withBody(dto)
+                    .expectStatus(201)
+                    .stores('bookmarkId', 'id')
+            })
+        })
+
+        describe('Get bookmarks', () => {
+            it('Get bookmarks created', () => {
+                return pactum
+                    .spec()
+                    .get('/bookmarks')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .expectStatus(200)
+                    .expectJsonLength(1)
+            })
+        })
+
+        describe('Get bookmark by Id', () => {
+            it('Get a bookmark', () => {
+                return pactum
+                    .spec()
+                    .get('/bookmarks/{id}')
+                    .withPathParams('id', '$S{bookmarkId}')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .expectStatus(200)
+            })
+        })
+
+        describe('Edit bookmark', () => {
+            const dto: EditBookmarkDto = {
+                title: 'Edited link',
+                link: 'https://some-ursssl.com',
+                description: 'I edited this desc'
+            }
+
+            it('Edit a bookmark', () => {
+                return pactum
+                    .spec()
+                    .patch('/bookmarks/{id}')
+                    .withPathParams('id', '$S{bookmarkId}')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .withBody(dto)
+                    .expectStatus(200)
+            })
+        })
+
+        describe('Delete bookmark', () => {
+
+            it('Delete a bookmark', () => {
+                return pactum
+                    .spec()
+                    .delete('/bookmarks/{id}')
+                    .withPathParams('id', '$S{bookmarkId}')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .expectStatus(200)
+            })
+        })
     });
 
 })

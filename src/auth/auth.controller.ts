@@ -13,9 +13,6 @@ export class AuthController {
     @Post('signup')
     // Comes from express
     signup(@Body() dto: AuthDto) {
-        console.log({
-            dto
-        })
         // Returned datatype is auto converted
         return this.authService.signup(dto);
     }
