@@ -177,6 +177,19 @@ describe('App e2e', () => {
     });
 
     describe('Bookmarks', () => {
+        describe('Get empty bookmarks', () => {
+            it('User without bookmarks gets empty list', () => {
+                return pactum
+                    .spec()
+                    .get('/bookmarks')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .expectStatus(200)
+                    .withBody('')
+            })
+        })
         describe('Create bookmark', () => { })
         describe('Get bookmarks', () => { })
         describe('Get bookmark by Id', () => { })
