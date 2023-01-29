@@ -13,4 +13,12 @@ export class PrismaService extends PrismaClient {
             }
         });
     }
+
+    cleanDb() {
+        // Open a transation so that we keep db integrity. Then clear all values in tables.
+        return this.$transaction([
+            this.bookmark.deleteMany(),
+            this.user.deleteMany()
+        ]);
+    }
 }
