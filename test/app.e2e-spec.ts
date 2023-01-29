@@ -4,6 +4,7 @@ import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
 import * as pactum from 'pactum';
 import { AuthDto } from '../src/auth/dto';
+import { EditUserDto } from '../src/user/dto';
 
 // This is e2e and only makes sure things work. integration testing is checking actual data and functions etc. Like unit tests.
 describe('App e2e', () => {
@@ -113,13 +114,66 @@ describe('App e2e', () => {
                     .post('/auth/signin')
                     .withBody(dto)
                     .expectStatus(200)
+                    .stores('userAccessToken', 'access_token');
             });
         })
     });
 
     describe('User', () => {
-        describe('Get me', () => { })
-        describe('Edit user', () => { })
+        describe('Get me', () => {
+            it('should get exception if no Bearer token', () => {
+                return pactum
+                    .spec()
+                    .get('/users/me')
+                    .expectStatus(401)
+            })
+
+            it('should get exception if incorrect Bearer token', () => {
+                return pactum
+                    .spec()
+                    .get('/users/me')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer itryhackyou'
+                    })
+                    .expectStatus(401)
+            })
+
+            it('should get current user', () => {
+                return pactum
+                    .spec()
+                    .get('/users/me')
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .expectStatus(200)
+            })
+        })
+
+        describe('Edit user', () => {
+            it('should get current user', () => {
+
+                const dto: EditUserDto = {
+                    email: 'test2@gmail.com',
+                    firstName: 'Chris',
+                    lastName: 'Test',
+                }
+
+                return pactum
+                    .spec()
+                    .patch('/users/edit')
+                    .withBody(dto)
+                    .withHeaders({
+                        // Use the variable from the store by using $s{varName} inside a regular string
+                        Authorization: 'Bearer $S{userAccessToken}'
+                    })
+                    .expectStatus(200)
+                    .expectBodyContains(dto.firstName)
+                    .expectBodyContains(dto.lastName)
+                    .expectBodyContains(dto.email)
+            })
+        })
     });
 
     describe('Bookmarks', () => {
