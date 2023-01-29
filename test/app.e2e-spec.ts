@@ -84,7 +84,6 @@ describe('App e2e', () => {
 
         describe('Signin', () => {
             it('should throw exception if email empty', () => {
-                // Use .inspect() appended like a console log to see what was returned.
                 return pactum
                     .spec()
                     .post('/auth/signin')
@@ -109,7 +108,6 @@ describe('App e2e', () => {
             });
 
             it('should signin', () => {
-                // Use .inspect() appended like a console log to see what was returned.
                 return pactum
                     .spec()
                     .post('/auth/signin')
@@ -258,6 +256,8 @@ describe('App e2e', () => {
                         Authorization: 'Bearer $S{userAccessToken}'
                     })
                     .withBody(dto)
+                    .expectBodyContains(dto.title)
+                    .expectBodyContains(dto.description)
                     .expectStatus(200)
             })
         })
@@ -273,7 +273,7 @@ describe('App e2e', () => {
                         // Use the variable from the store by using $s{varName} inside a regular string
                         Authorization: 'Bearer $S{userAccessToken}'
                     })
-                    .expectStatus(200)
+                    .expectStatus(204)
             })
         })
     });
